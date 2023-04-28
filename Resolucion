@@ -1,0 +1,79 @@
+public class Prenda {
+    public int idPrenda;
+    public TipoPrenda tipoPrenda;
+    public Categoria categoria;
+    public Material material;
+    public Trama trama;
+    public Color colorPrincipal;
+    public List<Color> coloresSecundarios;
+
+    public Prenda(TipoPrenda tipoPrenda, Categoria categoria, Material material, Color colorPrincipal, List<Color> coloresSecundarios, Trama trama) throws RuntimeException {
+        this.tipoPrenda = tipoPrenda;
+        this.material = material;
+        this.trama = trama;
+        this.colorPrincipal = colorPrincipal;
+        this.coloresSecundarios = coloresSecundarios;
+        if (tipoPrenda == null) {
+            throw new RuntimeException("no es posible crear una prenda sin especificar el tipo");
+        }
+        if (categoria == null) {
+            throw new RuntimeException("no es posible crear una prenda sin especificar la categoría");
+        }else if (!(tipoPrenda.categoriaValidaAsociada(categoria))){
+            throw new RuntimeException("la categoría indicada no corresponde al tipo de prenda indicado");
+        }
+        if (material == null){
+            throw new RuntimeException("no es posible crear una prenda sin especificar el material");
+        }else if (!(tipoPrenda.materialValidoAsociado(material.getTipoMaterial()))){
+            throw new RuntimeException("el material indicado no corresponde al tipo de prenda indicado");
+        }
+        if (trama == null){
+            this.trama = Trama.LISO;
+        }
+        if (colorPrincipal == null){
+            throw new RuntimeException("no es posible crear una prenda sin especificar el color");
+        }
+    }
+}
+
+public class TipoPrenda {
+    Categoria categoria;
+    TipoMaterial material;
+    Trama trama;
+    List<Categoria> categoriasValidas;
+    List<TipoMaterial> materialesValidos;
+
+    public TipoPrenda(Categoria categoria, TipoMaterial material, Trama trama) {
+        this.categoria = categoria;
+        this.material = material;
+        this.trama = trama;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+    public boolean categoriaValidaAsociada(Categoria categoria) {
+        return this.categoriasValidas.contains(categoria);
+    }
+    public boolean materialValidoAsociado(TipoMaterial material) {
+        return this.materialesValidos.contains(material);
+    }
+}
+
+public enum Categoria {PARTE_SUPERIOR, PARTE_INFERIOR, ACCESORIO, CALZADO}
+
+public class Material {
+    TipoMaterial tipoMaterial;
+    Trama trama;
+}
+
+public enum TipoMaterial {JEAN, ALGODON, FRIZA, CUERO, GAMUZA}//Falta agregar materiales
+
+public enum Trama {LISO, RAYADO, CON_LUNARES, A_CUADROS, ESTAMPADO}
+
+public class Color {
+    String colorEnHexa;
+
+    public Color(String colorEnHexa) {
+        this.colorEnHexa = colorEnHexa;
+    }
+}
